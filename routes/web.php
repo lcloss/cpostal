@@ -20,3 +20,5 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', '\App\Http\Controllers\CodigoPostalController@index')->name('home');
 Route::post('/search', '\App\Http\Controllers\CodigoPostalController@search')->name('search');
 Route::get('/export', '\App\Http\Controllers\CodigoPostalController@export')->name('export');
+Route::get('/apartados', '\App\Http\Controllers\ApartadoController@index')->name('apartados');
+Route::get('/apartados-export', '\App\Http\Controllers\ApartadoController@export')->name('apartados.export');

@@ -71,7 +71,7 @@ class CodigoPostalController extends Controller
                 $distrito,
                 $concelho,
                 $localidade,
-                $codigo_postal->cpost_4 . '-' . $codigo_postal->cpost_3,
+                $codigo_postal->codigo_postal,
                 $codigo_postal->descritivo_postal,
                 $codigo_postal->logradouro,
                 $codigo_postal->troco,
