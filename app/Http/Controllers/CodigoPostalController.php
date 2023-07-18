@@ -89,4 +89,9 @@ class CodigoPostalController extends Controller
 
         return response()->download($filename, $filename, $headers);
     }
+
+    public function all()
+    {
+        return view('codigos_postais.index');
+    }
 }
