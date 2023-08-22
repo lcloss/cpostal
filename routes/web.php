@@ -23,3 +23,4 @@ Route::get('/export', '\App\Http\Controllers\CodigoPostalController@export')->na
 Route::get('/apartados', '\App\Http\Controllers\ApartadoController@index')->name('apartados');
 Route::get('/apartados-export', '\App\Http\Controllers\ApartadoController@export')->name('apartados.export');
 Route::get('/codigo-postal', '\App\Http\Controllers\CodigoPostalController@all')->name('codigo-postal');
+Route::get('/aleatorio', '\App\Http\Controllers\CodigoPostalController@aleatorio')->name('aleatorio');

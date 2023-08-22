@@ -10,13 +10,15 @@ use App\Models\CodigoPostal;
 
 class CodigoPostalController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $distritos = Distrito::orderBy('nome')->get();
         $concelhos = [];
         $localidades = [];
 
-        return view('index', compact('distritos', 'concelhos', 'localidades'));
+        $cp = $request->input('cp');
+
+        return view('index', compact('distritos', 'concelhos', 'localidades', 'cp'));
     }
 
     public function search()
@@ -93,5 +95,10 @@ class CodigoPostalController extends Controller
     public function all()
     {
         return view('codigos_postais.index');
+    }
+
+    public function aleatorio()
+    {
+        return view('codigos_postais.aleatorio');
     }
 }

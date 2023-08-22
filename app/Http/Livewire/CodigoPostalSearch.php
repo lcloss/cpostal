@@ -21,12 +21,12 @@ class CodigoPostalSearch extends Component
     public $cpost = '';
     public $search = '';
 
-    public function mount()
+    public function mount($cp = '')
     {
         $this->distrito_id = '';
         $this->concelho_id = '';
         $this->localidade_id = '';
-        $this->cpost = '';
+        $this->cpost = $cp;
         $this->search = '';
     }
 
