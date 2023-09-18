@@ -13,7 +13,12 @@ class CodigoPostal extends Model
     {
         return $this->cpost_4 . '-' . $this->cpost_3;
     }
-    
+
+    public function distrito()
+    {
+        return $this->belongsTo(Distrito::class);
+    }
+
     public function concelho()
     {
         return $this->belongsTo(Concelho::class);

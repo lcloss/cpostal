@@ -13,4 +13,14 @@ class Distrito extends Model
     {
         return $this->hasMany(Concelho::class);
     }
+
+    public function localidades()
+    {
+        return $this->hasMany(Localidade::class);
+    }
+
+    public function codigos_postais()
+    {
+        return $this->hasMany(CodigoPostal::class);
+    }
 }

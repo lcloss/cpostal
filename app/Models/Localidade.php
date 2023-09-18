@@ -9,6 +9,11 @@ class Localidade extends Model
 {
     use HasFactory;
 
+    public function distrito()
+    {
+        return $this->belongsTo(Distrito::class);
+    }
+
     public function concelho()
     {
         return $this->belongsTo(Concelho::class);
