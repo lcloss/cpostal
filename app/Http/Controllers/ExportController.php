@@ -20,6 +20,9 @@ class ExportController extends Controller
         $path = 'exports/';
         $filename = $tipo;
         
+        
+
+
         // ... existing code ...
         
         if ( Storage::exists( $path . $filename) ) {
