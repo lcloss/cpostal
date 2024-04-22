@@ -33,66 +33,6 @@ class CodigoPostalController extends Controller
         return redirect()->route('home');
     }
 
-    public function export()
-    {
-        $distritos = Distrito::orderBy('nome')->get();
-        return view('codigos_postais.export', compact('distritos'));
-    }
-
-    public function exportRun(Request $request)
-    {
-        $distrito_id = $request->distrito;
-        $tipo = $request->tipo;
-        $formato = $request->formato;
-
-        $path = 'exports/';
-        $filename = $tipo;
-
-        if ( !empty( $distrito_id ) ) {
-            $distrito = Distrito::find($distrito_id);
-            $filename .= '_' . Str::slug($distrito->nome);
-        }
-
-        if ( $formato == 'csv' ) {
-            $filename .= '.csv';
-        } else {
-            $filename .= '.xlsx';
-        }
-
-        if ( Storage::exists( $path . $filename) ) {
-            return Storage::download( $path . $filename, $filename);
-        } else {
-            $max_execution_time = ini_get('max_execution_time');
-
-            // Set max execution time to 10 minutes
-            $ten_minutes = 10 * 60;
-            set_time_limit($ten_minutes);
-
-            if ( $tipo == 'codigos_postais' ) {
-                if ( $formato == 'csv' ) {
-                    // return $this->codigos_postais_export_csv($distrito_id, $filename);
-                    Excel::store(new CodigosPostaisExport($distrito_id), $path . $filename, \Maatwebsite\Excel\Excel::CSV);
-                    return ( new CodigosPostaisExport($distrito_id) )->download($filename);
-                } else {
-                    Excel::store(new CodigosPostaisExport($distrito_id), $path . $filename, \Maatwebsite\Excel\Excel::XLSX);
-                    return ( new CodigosPostaisExport($distrito_id) )->download($filename);
-                }
-            } else {
-                if ( $formato == 'csv') {
-                    // return $this->apartados_export_csv($filename);
-                    Excel::store(new ApartadosExport, $path . $filename, \Maatwebsite\Excel\Excel::CSV);
-                    return ( new ApartadosExport )->download($filename);
-                } else {
-                    Excel::store(new ApartadosExport, $path . $filename, \Maatwebsite\Excel\Excel::XLSX);
-                    return ( new ApartadosExport )->download($filename);
-                }
-            }
-
-            // Restore max execution time
-            set_time_limit($max_execution_time);
-        }
-    }
-
     private function codigos_postais_export_csv($distrito, $filename)
     {
         $filename = 'codigospostais_' . date('Y_m_d') . '.csv';
