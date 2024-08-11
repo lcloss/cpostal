@@ -15,8 +15,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', '\App\Http\Controllers\CodigoPostalController@index')->name('home');
 Route::post('/search', '\App\Http\Controllers\CodigoPostalController@search')->name('search');
-Route::get('/export', '\App\Http\Controllers\CodigoPostalController@export')->name('export');
-Route::post('/export-run', '\App\Http\Controllers\CodigoPostalController@exportRun')->name('export.run');
+Route::get('/export', '\App\Http\Controllers\ExportController@index')->name('export');
+Route::post('/export', '\App\Http\Controllers\ExportController@export')->name('export.run');
 Route::get('/apartados', '\App\Http\Controllers\ApartadoController@index')->name('apartados');
 Route::get('/codigo-postal', '\App\Http\Controllers\CodigoPostalController@all')->name('codigo-postal');
 Route::get('/aleatorio', '\App\Http\Controllers\CodigoPostalController@aleatorio')->name('aleatorio');
