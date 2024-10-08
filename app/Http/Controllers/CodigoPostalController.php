@@ -3,20 +3,29 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Builder;
 use App\Models\Distrito;
 use App\Models\Concelho;
 use App\Models\Localidade;
+use App\Models\Apartado;
 use App\Models\CodigoPostal;
+use Illuminate\Support\Str;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\CodigosPostaisExport;
+use App\Exports\ApartadosExport;
+use Illuminate\Support\Facades\Storage;
 
 class CodigoPostalController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $distritos = Distrito::orderBy('nome')->get();
         $concelhos = [];
         $localidades = [];
 
-        return view('index', compact('distritos', 'concelhos', 'localidades'));
+        $cp = $request->input('cp');
+
+        return view('index', compact('distritos', 'concelhos', 'localidades', 'cp'));
     }
 
     public function search()
@@ -24,13 +33,14 @@ class CodigoPostalController extends Controller
         return redirect()->route('home');
     }
 
-    public function export()
+    private function codigos_postais_export_csv($distrito, $filename)
     {
-        $ten_minutes = 20 * 60;
+        $filename = 'codigospostais_' . date('Y_m_d') . '.csv';
 
-        set_time_limit($ten_minutes);
+        $codigos_postais = CodigoPostal::when($distrito, function(Builder $query, $distrito) {
+            return $query->where('distrito_id', $distrito);
 
-        $codigos_postais = CodigoPostal::orderBy('cpost_4')->orderBy('cpost_3')->get();
+        })->orderBy('cpost_4')->orderBy('cpost_3')->get();
 
         $header = [
             'Distrito',
@@ -42,7 +52,6 @@ class CodigoPostalController extends Controller
             'Troço',
         ];
 
-        $filename = 'codigospostais_' . date('Y_m_d') . '.csv';
         $handle = fopen($filename, 'w+');
         fputcsv($handle, $header);
 
@@ -54,15 +63,15 @@ class CodigoPostalController extends Controller
         $localidade = '';
 
         foreach( $codigos_postais as $codigo_postal ) {
-            if ( $distrito_id != $codigo_postal->concelho->distrito_id ) {
+            if ($distrito_id != $codigo_postal->concelho->distrito_id) {
                 $distrito_id = $codigo_postal->concelho->distrito_id;
                 $distrito = $codigo_postal->concelho->distrito->nome;
             }
-            if ( $concelho_id != $codigo_postal->concelho_id ) {
+            if ($concelho_id != $codigo_postal->concelho_id) {
                 $concelho_id = $codigo_postal->concelho_id;
                 $concelho = $codigo_postal->concelho->nome;
             }
-            if ( $localidade_id != $codigo_postal->localidade_id ) {
+            if ($localidade_id != $codigo_postal->localidade_id) {
                 $localidade_id = $codigo_postal->localidade_id;
                 $localidade = $codigo_postal->localidade->nome;
             }
@@ -71,7 +80,7 @@ class CodigoPostalController extends Controller
                 $distrito,
                 $concelho,
                 $localidade,
-                $codigo_postal->cpost_4 . '-' . $codigo_postal->cpost_3,
+                $codigo_postal->codigo_postal,
                 $codigo_postal->descritivo_postal,
                 $codigo_postal->logradouro,
                 $codigo_postal->troco,
@@ -85,8 +94,51 @@ class CodigoPostalController extends Controller
             'Content-Type' => 'text/csv',
         );
 
-        set_time_limit(60);
+        return response()->download($filename, $filename, $headers);
+    }
+
+    private function apartados_export_csv()
+    {
+        $filename = 'apartados_' . date('Y_m_d') . '.csv';
+        $apartados = Apartado::orderBy('cpost_4')->orderBy('cpost_3')->get();
+
+        $header = [
+            'Tipo',
+            'Denominação',
+            'Código Postal',
+            'Descritivo',
+        ];
+
+        $handle = fopen($filename, 'w+');
+        fputcsv($handle, $header);
+
+        foreach( $apartados as $apartado ) {
+            $data = [
+                $apartado->tipo,
+                $apartado->denominacao,
+                $apartado->codigo_postal,
+                $apartado->descritivo_postal,
+            ];
+            fputcsv($handle, $data);
+        }
+
+
+        fclose($handle);
+
+        $headers = array(
+            'Content-Type' => 'text/csv',
+        );
 
         return response()->download($filename, $filename, $headers);
+    }
+
+    public function all()
+    {
+        return view('codigos_postais.index');
+    }
+
+    public function aleatorio()
+    {
+        return view('codigos_postais.aleatorio');
     }
 }

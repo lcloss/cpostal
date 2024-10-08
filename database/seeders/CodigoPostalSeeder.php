@@ -43,6 +43,7 @@ class CodigoPostalSeeder extends Seeder
 
                         if ( is_null( $localidade )  ) {
                             $localidade_data = [
+                                'distrito_id'       => $distrito->id,
                                 'concelho_id'       => $concelho->id,
                                 'codigo_distrito'   => $data[0],
                                 'codigo_concelho'   => $data[1],
@@ -71,6 +72,7 @@ class CodigoPostalSeeder extends Seeder
                 $logradouro = trim( $logradouro );
 
                 $codigo_postal_data = [
+                    'distrito_id'       => $distrito->id,
                     'concelho_id'       => $concelho->id,
                     'localidade_id'     => $localidade->id,
                     'codigo_distrito'   => $last_distrito,

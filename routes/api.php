@@ -17,3 +17,6 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('codigos_postais', 'App\Http\Controllers\Api\CodigoPostalController@index');
+Route::get('codigos_postais/{postal_code}', 'App\Http\Controllers\Api\CodigoPostalController@postal');

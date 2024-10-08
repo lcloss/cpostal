@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('codigo_postals', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('distrito_id')->constrained()->onDelete('cascade');
             $table->foreignId('concelho_id')->constrained()->onDelete('cascade');
             $table->foreignId('localidade_id')->constrained()->onDelete('cascade');
             $table->string('codigo_distrito', 2);

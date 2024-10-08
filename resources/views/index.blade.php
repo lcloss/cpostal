@@ -12,7 +12,7 @@
                                     <a class="btn btn-outline-success" href="{{ route('export') }}">Exportar</a>
                                 </div>
                             </div> --}}
-                            @livewire('codigo-postal-search')
+                            @livewire('codigo-postal-search', ['cp' => $cp ?? ''])
                         </div>
                     </div>
 @endsection

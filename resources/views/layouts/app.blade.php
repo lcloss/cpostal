@@ -11,6 +11,7 @@
         <!-- Core theme CSS (includes Bootstrap)-->
         @vite(['resources/css/app.css', 'resources/css/styles.css', 'resources/js/app.js'])
         @livewireStyles
+        @yield('styles')
     </head>
     <body>
         <div class="d-flex" id="wrapper">
@@ -29,6 +30,7 @@
             </div>
         </div>
         @livewireScripts
+        @yield('scripts')
         <!-- Bootstrap core JS-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
         <!-- Core theme JS-->
