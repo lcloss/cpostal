@@ -75,10 +75,18 @@ class CodigoPostalSearch extends Component
             $query->where('localidade_id', $this->localidade_id);
 
         })->when($cpost_4, function ($query) use($cpost_4) {
-            $query->where('cpost_4', $cpost_4);
+            if (strlen($cpost_4) == 4) {
+                $query->where('cpost_4', $cpost_4);
+            } else {
+                $query->where('cpost_4', 'like', $cpost_4 . '%');
+            }
 
         })->when($cpost_3, function ($query) use($cpost_3) {
-            $query->where('cpost_3', $cpost_3);
+            if (strlen($cpost_3) == 3) {
+                $query->where('cpost_3', $cpost_3);
+            } else {
+                $query->where('cpost_3', 'like', $cpost_3 . '%');
+            }
 
         })->when($this->search != '', function ($query) {
             $query->where(function ($q) {

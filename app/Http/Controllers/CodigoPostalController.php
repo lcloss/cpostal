@@ -11,6 +11,8 @@ use App\Models\Localidade;
 use App\Models\Apartado;
 use App\Models\CodigoPostal;
 use Illuminate\Support\Str;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\CodigosPostaisExport;
 use App\Exports\ApartadosExport;
 use Illuminate\Support\Facades\Storage;
 
