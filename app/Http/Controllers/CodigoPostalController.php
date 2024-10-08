@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\GenerateExport;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
 use App\Models\Distrito;
@@ -31,6 +32,21 @@ class CodigoPostalController extends Controller
     public function search()
     {
         return redirect()->route('home');
+    }
+
+    public function export()
+    {
+        $distritos = Distrito::orderBy('nome')->get();
+        return view('codigos_postais.export', compact('distritos'));
+    }
+
+    public function exportRun(Request $request)
+    {
+        $distrito_id = $request->distrito;
+        $tipo = $request->tipo;
+        $formato = $request->formato;
+
+        return dispatch( new GenerateExport($tipo, $formato, $distrito_id) );
     }
 
     private function codigos_postais_export_csv($distrito, $filename)

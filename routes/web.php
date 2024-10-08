@@ -20,3 +20,4 @@ Route::post('/export', '\App\Http\Controllers\ExportController@export')->name('e
 Route::get('/apartados', '\App\Http\Controllers\ApartadoController@index')->name('apartados');
 Route::get('/codigo-postal', '\App\Http\Controllers\CodigoPostalController@all')->name('codigo-postal');
 Route::get('/aleatorio', '\App\Http\Controllers\CodigoPostalController@aleatorio')->name('aleatorio');
+Route::get('/download/{filename}', '\App\Http\Controllers\DownloadController@download')->name('download');
