@@ -39,17 +39,27 @@ class CodigosPostaisExport implements FromQuery, WithHeadings, WithMapping
     */
     public function query()
     {
-        $query = CodigoPostal::query()
+//        $query = CodigoPostal::query()
+//            ->join('distritos', 'distritos.id', '=', 'codigo_postals.distrito_id')
+//            ->join('concelhos', 'concelhos.id', '=', 'codigo_postals.concelho_id')
+//            ->join('localidades', 'localidades.id', '=', 'codigo_postals.localidade_id')
+//            ->select('distritos.nome as distrito', 'concelhos.nome as concelho', 'localidades.nome as localidade', 'codigo_postals.cpost_4', 'codigo_postals.cpost_3', 'codigo_postals.descritivo_postal', 'codigo_postals.logradouro', 'codigo_postals.troco');
+        $query = CodigoPostal::select('distritos.nome as distrito', 'concelhos.nome as concelho', 'localidades.nome as localidade', 'codigo_postals.cpost_4', 'codigo_postals.cpost_3', 'codigo_postals.descritivo_postal', 'codigo_postals.logradouro', 'codigo_postals.troco')
             ->join('distritos', 'distritos.id', '=', 'codigo_postals.distrito_id')
             ->join('concelhos', 'concelhos.id', '=', 'codigo_postals.concelho_id')
             ->join('localidades', 'localidades.id', '=', 'codigo_postals.localidade_id')
-            ->select('distritos.nome as distrito', 'concelhos.nome as concelho', 'localidades.nome as localidade', 'codigo_postals.cpost_4', 'codigo_postals.cpost_3', 'codigo_postals.descritivo_postal', 'codigo_postals.logradouro', 'codigo_postals.troco');
+            ->when( $this->distrito_id != '', function ($q) {
+                return $q->where('codigo_postals.distrito_id', $this->distrito_id);
+            })
+            ->orderBy('codigo_postals.cpost_4')->orderBy('codigo_postals.cpost_3');
 
-        if ( !empty( $this->distrito_id ) ) {
-            $query->where('codigo_postals.distrito_id', $this->distrito_id);
-        }
+        // dd( $query );
 
-        $query->orderBy('codigo_postals.cpost_4')->orderBy('codigo_postals.cpost_3');
+//        if ( !empty( $this->distrito_id ) ) {
+//            $query->where('codigo_postals.distrito_id', $this->distrito_id);
+//        }
+//
+//        $query->orderBy('codigo_postals.cpost_4')->orderBy('codigo_postals.cpost_3');
 
         return $query;
     }
